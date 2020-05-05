@@ -1,4 +1,5 @@
 import keras
+from keras import models
 from keras.models import Model
 from keras.layers import Input, Conv2D, MaxPooling2D, Flatten, Dense, Dropout
 from keras import optimizers
@@ -9,10 +10,10 @@ import dataset
 # check if using gpu
 import tensorflow as tf
 sess = tf.compat.v1.Session(config=tf.compat.v1.ConfigProto(log_device_placement=True))
-# import seaborn as sns
+import seaborn as sns
 
 NUM_CLASSES = 2         # number of classes
-NUM_MC = 100            # number of monte carlo samples
+NUM_MC = 10           # number of monte carlo samples
 
 class MCDropout:
     def __init__(self, filepath, datagen=None, data=None):
@@ -60,15 +61,28 @@ class MCDropout:
             callbacks=[checkpoint], validation_data=(X_test, y_test))
         return model
 
-    def evaluate(self):
+    def evaluate(self, X_test, y_test):
         pred = []
         for i in range(NUM_MC):
             # get Monte Carlo samples by sampling network NUM_MC times
-            pred.append(self.model.predict(self.data['X_test']))
-        meanpred = pred.mean()
-        stdpred = pred.std()
+            # _, acc = self.model.evaluate(X_test, y_test)
+            prediction = self.model.predict(X_test)[0][1]
+            pred.append(prediction)
+            # print(pred)
+            # break
+            # pred1.append(pred[1])
+            # print(acc)
+        sns.distplot(pred)
+        import matplotlib.pyplot as plt
+        plt.show()
+        meanpred = np.mean(pred)
+        stdpred = np.std(pred)
+        print(meanpred)
+        print(stdpred)
+
 
 data = dataset.get_datadict()
 datagen = dataset.get_datagen()
 
-MCDropout('/', datagen=datagen, data=data)
+model = MCDropout('models/')
+model.evaluate(data['X_test'], data['y_test'])
