@@ -3,14 +3,13 @@ import cv2
 import pandas as pd
 import os
 from keras.utils import to_categorical
+from keras.preprocessing.image import ImageDataGenerator
 
-# define class encoding
-encoding = {'NORMAL': 0, 'PNEUMONIA': 1}
 
 def load_data(type):
     try:
         # load from npz
-        X, y = np.load('data/'+type+'.npz')
+        dataset = np.load('data/'+type+'.npz')
     except:
         # else load images
         images, labels = [], []
@@ -25,18 +24,21 @@ def load_data(type):
         labels = np.array(labels)
         # map to class encoding
         u, ind = np.unique(labels, return_inverse=True)
-        y = np.array([encoding[x] for x in u])[ind].reshape(1,-1)
+        encoding = {'NORMAL': 0, 'PNEUMONIA': 1, 'COVID': 2}
+        y = np.array([encoding[x] for x in u])[ind]
         # map to one hot encoding
-        one_hot_y = to_categorical(ind)
+        one_hot_y = to_categorical(y)
         # save to npz and load
         np.savez('data/'+type+'.npz', X=images, y=one_hot_y)
-        X, y = np.load('data/'+type+'.npz')
-    return X, y
+        dataset = np.load('data/'+type+'.npz')
+    return dataset
 
 def get_datadict():
+    data = dict()
     # return all splits in a dict
-    for type in ('train', 'test'):
-        data['X_'+type], data['y_'+type] = load_data(type)
+    for type in ('train', 'val', 'test'):
+        dataset = load_data(type)
+        data['X_'+type], data['y_'+type] = dataset.f.X, dataset.f.y
     return data
 
 def get_datagen():
