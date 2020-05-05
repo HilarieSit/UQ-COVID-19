@@ -9,11 +9,11 @@ from keras.preprocessing.image import ImageDataGenerator
 def load_data(type):
     try:
         # load from npz
-        dataset = np.load('data/'+type+'.npz')
+        dataset = np.load('chest_xray/'+type+'.npz')
     except:
         # else load images
         images, labels = [], []
-        for root, _, files in os.walk('data/'+type):
+        for root, _, files in os.walk('chest_xray/'+type):
             for name in files:
                 img = cv2.imread(os.path.join(root+'/'+name))
                 if img is not None:
@@ -29,8 +29,8 @@ def load_data(type):
         # map to one hot encoding
         one_hot_y = to_categorical(y)
         # save to npz and load
-        np.savez('data/'+type+'.npz', X=images, y=one_hot_y)
-        dataset = np.load('data/'+type+'.npz')
+        np.savez('chest_xray/'+type+'.npz', X=images, y=one_hot_y)
+        dataset = np.load('chest_xray/'+type+'.npz')
     return dataset
 
 def get_datadict():

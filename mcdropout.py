@@ -8,9 +8,7 @@ import dataset
 
 # check if using gpu
 import tensorflow as tf
-sess = tf.Session(config=tf.ConfigProto(log_device_placement=True))
-from keras import backend as K
-K.tensorflow_backend._get_available_gpus()
+sess = tf.compat.v1.Session(config=tf.compat.v1.ConfigProto(log_device_placement=True))
 # import seaborn as sns
 
 NUM_CLASSES = 2         # number of classes
@@ -19,7 +17,7 @@ NUM_MC = 100            # number of monte carlo samples
 class MCDropout:
     def __init__(self, filepath, datagen=None, data=None):
         try:
-            self.model = models.load_model(filepath+'/model.h5')
+            self.model = models.load_model(filepath+'model.h5')
         except:
             self.data = data
             self.filepath = filepath
@@ -46,17 +44,20 @@ class MCDropout:
             amsgrad=False)
         model.compile(loss=keras.losses.binary_crossentropy,
             optimizer=optimizer, metrics=['accuracy'])
-        checkpoint = callbacks.ModelCheckpoint(self.filepath+'/model.h5',
+        print(self.filepath+'model.h5')
+        checkpoint = callbacks.ModelCheckpoint(self.filepath+'model.h5',
             monitor='val_accuracy', mode='max', verbose=2, save_best_only=True)
 
         # train
         X_train = self.data['X_train']
         y_train = self.data['y_train']
+        X_test = self.data['X_test']
+        y_test = self.data['y_test']
 
         datagen.fit(X_train)
         model.fit_generator(datagen.flow(X_train, y_train, batch_size=64),
             steps_per_epoch=len(X_train) / 32, epochs=50, verbose=2,
-            callbacks=[checkpoint])
+            callbacks=[checkpoint], validation_data=(X_test, y_test))
         return model
 
     def evaluate(self):
@@ -68,7 +69,6 @@ class MCDropout:
         stdpred = pred.std()
 
 data = dataset.get_datadict()
-print(data['X_train'])
 datagen = dataset.get_datagen()
 
-MCDropout('models/', datagen=datagen, data=data)
+MCDropout('/', datagen=datagen, data=data)
