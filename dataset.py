@@ -2,9 +2,9 @@ import numpy as np
 import cv2
 import pandas as pd
 import os
+from scipy import stats
 from keras.utils import to_categorical
 from keras.preprocessing.image import ImageDataGenerator
-
 
 def load_data(type):
     try:
@@ -22,12 +22,18 @@ def load_data(type):
                     labels.append(os.path.basename(root))
         images = np.array(images)
         labels = np.array(labels)
+
         # map to class encoding
         u, ind = np.unique(labels, return_inverse=True)
-        encoding = {'NORMAL': 0, 'PNEUMONIA': 1, 'COVID': 2}
+        encoding = {'NORMAL': 0, 'PNEUMONIA': 1, 'COVID-19': 2}
         y = np.array([encoding[x] for x in u])[ind]
+
+        if type != 'test':
+            X, y = equate_dataset(images, y)
+
         # map to one hot encoding
         one_hot_y = to_categorical(y)
+
         # save to npz and load
         np.savez('chest_xray/'+type+'.npz', X=images, y=one_hot_y)
         dataset = np.load('chest_xray/'+type+'.npz')
@@ -41,6 +47,23 @@ def get_datadict():
         data['X_'+type], data['y_'+type] = dataset.f.X, dataset.f.y
     return data
 
+def equate_dataset(X, y):
+    # random upsampling
+    clabels, counts = np.unique(y, return_counts=True)
+    inds = np.argsort(-counts)
+    max = counts[inds][0]
+    for ind in inds:
+        clabel = clabels[ind]
+        a = counts[ind]
+        if a != max:
+            size = max - a
+            more_ind = np.random.choice(a=a, size=size)
+            more_X = X[more_ind,:,:,:]
+            more_y = y[more_ind]
+            X = np.concatenate((X, more_X), axis=0)
+            y = np.concatenate((y, more_y), axis=0)
+    return X, y
+
 def get_datagen():
     # code from Keras Image Preprocessing documentation
     # https://keras.io/preprocessing/image/
@@ -52,3 +75,5 @@ def get_datagen():
         height_shift_range=0.2,
         horizontal_flip=True)
     return datagen
+
+load_data('val')
