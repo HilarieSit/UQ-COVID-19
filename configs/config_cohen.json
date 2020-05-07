@@ -1,0 +1,14 @@
+{    
+    "imgpath" : "covid-chestxray-dataset/images",
+    "csvpath" : "covid-chestxray-dataset/metadata.csv",
+    "extrac_cols" : ["patientid", "finding", "filename", "view"],
+    "extrac_rows" : "PA",
+    "id_col" : "patientid",
+    "result_col" : "finding",
+    "img_name_col" : "filename",
+    "img_format_dcm" : false,
+    
+    "test_split" : 0.2,
+    "valid_split" : 0.2
+}
+
