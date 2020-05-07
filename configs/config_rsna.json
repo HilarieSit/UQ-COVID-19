@@ -1,0 +1,14 @@
+{    
+    "imgpath" : "rsna-pneumonia-detection-challenge/stage_2_train_images",
+    "csvpath" : "rsna-pneumonia-detection-challenge/stage_2_detailed_class_info.csv",
+    "extrac_cols" : ["patientId", "class"],
+    "extrac_rows" : null,
+    "id_col" : "patientId",
+    "result_col" : "class",
+    "img_name_col" : null,
+    "img_format_dcm" : true,
+    
+    "test_split" : 0.2,
+    "valid_split" : 0.2
+}
+
