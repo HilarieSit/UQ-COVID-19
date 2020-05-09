@@ -64,3 +64,4 @@ def AlexNet(NUM_CLASSES):
     x = Dropout(0.5)(x)
     output = Dense(NUM_CLASSES, activation='softmax')(x)
     model = Model(inputs=input, outputs=output)
+    return model
