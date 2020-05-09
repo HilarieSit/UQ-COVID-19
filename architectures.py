@@ -1,5 +1,5 @@
 from keras.models import Model
-from keras.layers import Input, Conv2D, MaxPooling2D, Flatten, Dense, Dropout
+from keras.layers import Input, Conv2D, MaxPooling2D, Flatten, Dense, Dropout, ZeroPadding2D
 from keras.applications import VGG16
 
 def CNN(NUM_CLASSES):
@@ -34,3 +34,33 @@ def VGG16(NUM_CLASSES):
     for layer in base_model.layers:
         layer.trainable = False
     return model
+
+def AlexNet(NUM_CLASSES):
+    # https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-
+    # convolutional-neural-networks.pdf
+    input = Input(shape=(224, 224 ,3))
+        # first layer
+    x = Conv2D(96, kernel_size=(11, 11), padding = 'valid', strides=(4,4), activation='relu')(input)
+    x = MaxPooling2D(pool_size=(3, 3), strides = (2,2))(x)
+        # second layer
+    x = ZeroPadding2D((2,2))(x)
+    x = Conv2D(256, kernel_size=(5, 5), strides = (1, 1), padding = 'same', activation='relu')(x)
+    x = MaxPooling2D(pool_size=(3, 3), strides = (2,2), padding= 'valid')(x)
+        # third layer
+    x = ZeroPadding2D((1,1))(x)
+    x = Conv2D(384, kernel_size=(3, 3), strides = (1, 1), padding = 'same', activation='relu')(x)
+        # fourth layer
+    x = ZeroPadding2D((1,1))(x)
+    x = Conv2D(384, kernel_size=(3, 3), strides = (1, 1), padding = 'same', activation='relu')(x)
+        # fifth layer
+    x = ZeroPadding2D((1,1))(x)
+    x = Conv2D(256, kernel_size=(3, 3), strides = (1, 1), padding = 'same', activation='relu')(x)
+    x = MaxPooling2D(pool_size=(3, 3), strides = (2, 2), padding = 'valid')(x)
+        # fully connected layers
+    x = Flatten()(x)
+    x = Dense(4096, activation='relu')(x)
+    x = Dropout(0.5)(x)
+    x = Dense(4096, activation='relu')(x)
+    x = Dropout(0.5)(x)
+    output = Dense(NUM_CLASSES, activation='softmax')(x)
+    model = Model(inputs=input, outputs=output)
