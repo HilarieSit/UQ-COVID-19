@@ -1,11 +1,10 @@
 import keras
 from keras import models
-from keras.models import Model
-from keras.layers import Input, Conv2D, MaxPooling2D, Flatten, Dense, Dropout
 from keras import optimizers
 from keras import callbacks
 import numpy as np
 import dataset
+import architectures
 
 # check if using gpu
 import tensorflow as tf
@@ -26,19 +25,7 @@ class MCDropout:
 
     def train(self, datagen):
         # architecture
-        input = Input(shape=(224, 224 ,3))
-        # default is channels last
-        x = Conv2D(16, kernel_size=(3, 3), activation='relu')(input)
-        x = MaxPooling2D(pool_size=(2, 2))(x)
-        x = Dropout(0.5)(x, training=True)
-        x = Conv2D(32, kernel_size=(3, 3), activation='relu')(x)
-        x = MaxPooling2D(pool_size=(2, 2))(x)
-        x = Dropout(0.5)(x, training=True)
-        x = Flatten()(x)
-        x = Dense(128, activation='relu')(x)
-        x = Dropout(0.5)(x)
-        output = Dense(NUM_CLASSES, activation='softmax')(x)
-        model = Model(inputs=input, outputs=output)
+        model = architectures.CNN(NUM_CLASSES)
 
         # optimizer/loss
         optimizer = keras.optimizers.Adam(lr=1e-3, beta_1=0.9, beta_2=0.999,
