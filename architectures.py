@@ -38,7 +38,7 @@ def VGG16(NUM_CLASSES):
 def AlexNet(NUM_CLASSES):
     # https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-
     # convolutional-neural-networks.pdf
-    input = Input(shape=(224, 224 ,3))
+    input = Input(shape=(224, 224 ,NUM_CLASSES))
         # first layer
     x = Conv2D(96, kernel_size=(11, 11), padding = 'valid', strides=(4,4), activation='relu')(input)
     x = MaxPooling2D(pool_size=(3, 3), strides = (2,2))(x)
