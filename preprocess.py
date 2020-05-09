@@ -8,8 +8,8 @@ import cv2
 import json
 from sklearn.model_selection import train_test_split
 
-parent_dir = "data"
-divide_dir = ["test", "valid", "train",]
+parent_dir = "chest_xray"
+divide_dir = ["test", "val", "train",]
 case_dir = ["COVID", "NORMAL", "PNEUMONIA"]
 
 for i in range(0, len(divide_dir)):
