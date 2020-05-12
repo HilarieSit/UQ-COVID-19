@@ -28,14 +28,16 @@ def load_data(type):
         encoding = {'NORMAL': 0, 'PNEUMONIA': 1, 'COVID-19': 2}
         y = np.array([encoding[x] for x in u])[ind]
 
-        if type != 'test':
-            X, y = equate_dataset(images, y)
-
         # map to one hot encoding
         one_hot_y = to_categorical(y)
 
+        if type != 'test':
+            images, y = equate_dataset(images, y)
+            np.savez('chest_xray/'+type+'.npz', X=images, y=one_hot_y)
+        else:
+            np.savez('chest_xray/'+type+'.npz', X=images, y=one_hot_y)
+
         # save to npz and load
-        np.savez('chest_xray/'+type+'.npz', X=images, y=one_hot_y)
         dataset = np.load('chest_xray/'+type+'.npz')
     return dataset
 
@@ -62,6 +64,8 @@ def equate_dataset(X, y):
             more_y = y[more_ind]
             X = np.concatenate((X, more_X), axis=0)
             y = np.concatenate((y, more_y), axis=0)
+            print(X.shape)
+            print(y.shape)
     return X, y
 
 def get_datagen():
