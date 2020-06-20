@@ -1,0 +1,26 @@
+{% extends "template.html" %}
+
+{% block content %}
+<img id="previewimg" src="#" alt="your image">
+<form method=post enctype=multipart/form-data>
+    <label id="modellabel">Select ML Model:
+      <select id="model" name="model">
+        <option value="MCdrop">MC Dropout</option>
+        <option value="BNN">Bayesian Neural Network</option>
+      </select>
+      <i class="fa fa-info-circle"></i>
+      <!-- <div class="overlay"> Machine learning models with uncertainty prediction </div> -->
+    </label>
+    <div id="photolabel">Upload Chest X-Ray Image:
+      <label id="photobutton">Select Image
+        <input id="fileupload" type=file name=file>
+      </label>
+      <label id="submitlabel"><input id="submit" type=submit value="Confirm"></label>
+    </div>
+    <div id="loadingtxt">
+      <p> Please Wait. Evaluating Image. </p>
+      <img id="loading" src="../static/loading-png-gif.gif" alt="your image">
+    </div>
+  </div>
+</form>
+{% endblock %}

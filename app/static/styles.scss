@@ -1,0 +1,154 @@
+body{
+  width: 100vw;
+  padding: 0;
+  margin: 0;
+  overflow-x: visible;
+  align-items: center;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.9);
+  background: #282828;
+  font-family: 'Oswald', sans-serif;
+  font-size: 18px;
+}
+
+img{
+  margin: 20px auto 50px auto;
+  width: 400px;
+  height: 400px;
+  display: block;
+}
+
+#content{
+  width: 900px;
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+
+  @at-root h1{
+    margin: 20px auto;
+    width: 600px;
+    font-size: 30px;
+  }
+
+  @at-root h2{
+    display: inline-block;
+    margin: 0 auto;
+    width: 600px;
+    font-size: 18px !important;
+  }
+
+  #previewimg{
+    display: none;
+    margin: 0px;
+    margin-top: 30px;
+  }
+
+  #prediction{
+    width: 400px;
+
+    button{
+      padding: 2px;
+      background-color: #eee;
+    }
+  }
+}
+
+form{
+  padding: 30px 0;
+  padding-left: 40px;
+  width: 400px;
+  z-index: 1;
+
+  input{
+    display: inline-block;
+  }
+
+  input[type="file"]{
+      display: none;
+  }
+
+  @at-root #modellabel{
+    display: block;
+    margin-top: 20px;
+    width: 100%;
+    vertical-align: bottom;
+  }
+
+  @at-root #model{
+    outline: none;
+    border: 2px solid #aaa;
+    border-radius: 5px;
+    width: 190px;
+    background-color: #eee;
+    font-family: 'Oswald', sans-serif;
+    font-size: 18px;
+  }
+
+  @at-root #photolabel{
+    display: inline-block;
+    margin-top: 20px;
+    vertical-align: middle;
+
+    #photobutton{
+      border: 2px solid #aaa;
+      border-radius: 5px;
+      background-color: #eee;
+      padding: 2px 5px;
+      color: black;
+    }
+
+    #fileupload{
+      background-color: #eee;
+      border-radius: 5px;
+      color: black;
+      font-family: 'Oswald', sans-serif;
+      font-size: 18px;
+      border: 2px solid #aaa;
+      width: 250px;
+    }
+
+    #submitlabel{
+      display: none;
+      margin: 0 auto;
+      margin-top: 20px;
+      font-family: 'Oswald', sans-serif;
+      font-size: 18px;
+
+      #submit{
+        padding: 2px 5px;
+        margin-left: 5px;
+        font-family: 'Oswald', sans-serif;
+        font-size: 18px;
+        border-radius: 5px;
+        background-color: #ADDFAD;
+        border: 2px solid green;
+      }
+    }
+  }
+
+  @at-root #loadingtxt{
+    font-size: 25px;
+    display: none;
+    position: absolute;
+    text-align: center;
+    margin-top: -247px;
+    margin-left: -10px;
+    margin-right: 10px;
+    height: 400px;
+    z-index: 2 !important;
+    background-color: rgba(50, 50, 50, 0.9);
+
+    p{
+      position:relative;
+      top: 140px;
+    }
+
+    #loading{
+      position: relative;
+      top: 120px;
+      width: 50px;
+      height: 50px;
+    }
+  }
+
+}

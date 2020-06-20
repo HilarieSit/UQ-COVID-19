@@ -1,0 +1,12 @@
+{% extends "template.html" %}
+
+{% block content %}
+<div class="photo">
+  <img src="../{{ imgurl }}" alt="xray"></img>
+</div>
+<div id="prediction">
+  <p> Model: MC Dropout </p>
+  <p> Prediction: {{ predictions }} </p>
+  <a href="../"> <button> Back </button> </a>
+</div>
+{% endblock %}
